@@ -1,12 +1,19 @@
 package com.cbh.jrdp;
 
+import sun.misc.JavaLangAccess;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicBorders;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.URL;
 
 /**
  * Client class
@@ -70,7 +77,7 @@ public class Client {
 
         int w = d.width;
         int h = d.height;
-        BufferedImage bi = resize(img, 800, 600);
+        BufferedImage bi = resize(img, w, h);
 
         imag_lab.setIcon(new ImageIcon(bi));
         imag_lab.repaint();//销掉以前画的背景
@@ -93,9 +100,23 @@ public class Client {
         JFrame jf = new JFrame("控制台");
         setListener(jf);
         //控制台大小
-        jf.setSize(500, 400);
+//        jf.setSize(500, 400);
+//        jf.setUndecorated(true);
+        GraphicsDevice device = jf.getGraphicsConfiguration().getDevice();
+        device.setFullScreenWindow(jf);
         //imag_lab用于存放画面
-        imag_lab = new JLabel();
+        imag_lab = new JLabel("加载中...", JLabel.CENTER);
+        imag_lab.setLayout(new BorderLayout());
+        imag_lab.setOpaque(true);
+        imag_lab.setBackground(Color.BLACK);
+        imag_lab.setForeground(Color.white);
+        imag_lab.setBorder(new BasicBorders.ButtonBorder(Color.white, Color.white, Color.white, Color.white));
+//        imag_lab.setIcon(new ImageIcon(Client.class.getResource("/").getPath()+"cursor-fill.png"));
+        // imag_lab 范围内隐藏本地的光标
+        URL classUrl = Client.class.getResource("");
+        Image imageCursor = Toolkit.getDefaultToolkit().getImage(classUrl);
+        imag_lab.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(
+                imageCursor,  new Point(0, 0), "cursor"));
         jf.add(imag_lab);
         //设置控制台可见
         jf.setVisible(true);
