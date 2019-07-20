@@ -1,3 +1,5 @@
+import com.cbh.jrdp.Server;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -14,5 +16,7 @@ public class FileTest {
         System.out.println(newFile);
         System.out.println(file.getAbsolutePath());
 
+        String cursorPath = Server.class.getResource("/").getPath();
+        System.out.println(cursorPath);
     }
 }
